@@ -4,7 +4,7 @@ import itertools
 
 class Cache:
 
-    def __init__(self, size=5, ttl=10*60):
+    def __init__(self, size=5, ttl=100000*60):
         self._size = size
         self._ttl = ttl
         self._cache = {}
@@ -41,10 +41,10 @@ class Cache:
         self._cache[key] = entry
 
         if self._size < len(self._cache):
-            self._cache = dict(filter(lambda it: it.valid, entry.items()))
+            self._cache = dict(filter(lambda it: it[1].valid, self._cache.items()))
 
-        if self._size <= len(self._cache):
-            del self._cache[min(self._cache.items(), key=lambda it: it.valid)]
+        if self._size < len(self._cache):
+            del self._cache[min(self._cache.keys(), key=lambda it: self._cache[it].access_time)]
 
 
 class Entry:
@@ -68,7 +68,7 @@ class Entry:
 
     @property
     def access_time(self):
-        return self._access_count
+        return self._access_time
 
     @access_time.setter
     def access_time(self, value):

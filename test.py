@@ -24,10 +24,9 @@ class InterfaceTestCase(unittest.TestCase):
         self.assertEqual(c.get("c"), 3)
         c.add("h", 8)
         self.assertEqual(c.get("c"), 3)
-        self.assertEqual(c.get("d"), None)
         self.assertEqual(c.contains("a"), False)
         self.assertEqual(c.contains("c"), True)
-        c.invalidate()
+        c.clear()
         self.assertEqual(c.size(), 0)
 
 
